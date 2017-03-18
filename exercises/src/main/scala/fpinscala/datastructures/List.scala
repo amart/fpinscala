@@ -78,11 +78,36 @@ object List { // `List` companion object. Contains functions for creating and wo
                          else dropWhile(t, f)
     }
 
-  def init[A](l: List[A]): List[A] = ???
+  def init[A](l: List[A]): List[A] =
+    l match {
+      case Nil => l
+      case Cons(h, Cons(t, Nil)) => List(h)
+      case Cons(h, t) => append(List(h), init(t))
+    }
 
-  def length[A](l: List[A]): Int = ???
+  def length[A](l: List[A]): Int =
+    l match {
+      case Nil => 0
+      case _ => foldRight(l, 0)((x, y) => 1 + y)
+    }
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = ???
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    l match {
+      case Nil => z
+      case Cons(h, t) => foldLeft(t, f(z, h))(f)
+    }
+
+  def sumFL(as: List[Int]): Int =
+    foldLeft(as, 0)((x, y) => x + y)
+
+  def productFL(as: List[Double]): Double =
+    foldLeft(as, 1.0)((x, y) => x * y)
+
+  def lengthFL[A](as: List[A]): Int =
+    foldLeft(as, 0)((x, y) => x + 1)
+
+  def reverse[A](as: List[A]): List[A] =
+    foldLeft(as, Nil: List[A])((x, y) => Cons(y, x))
 
   def map[A,B](l: List[A])(f: A => B): List[B] = ???
 }
