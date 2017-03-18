@@ -63,9 +63,20 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(lh, t) => Cons(h, t)
     }
 
-  def drop[A](l: List[A], n: Int): List[A] = ???
+  // this assumes that n >= 0
+  def drop[A](l: List[A], n: Int): List[A] =
+    l match {
+      case Nil => l
+      case Cons(h, t) => if (n == 0) l
+                         else drop(t, n-1)
+    }
 
-  def dropWhile[A](l: List[A], f: A => Boolean): List[A] = ???
+  def dropWhile[A](l: List[A], f: A => Boolean): List[A] =
+    l match {
+      case Nil => l
+      case Cons(h, t) => if (!(f(h))) l
+                         else dropWhile(t, f)
+    }
 
   def init[A](l: List[A]): List[A] = ???
 
